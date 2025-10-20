@@ -1,7 +1,7 @@
-import ToDoWidget from './ToDoWidget.js';
-import QuoteWidget from './QuoteWidget.js';
-import WeatherWidget from './WeatherWidget.js';
-import NewsWidget from './NewsWidget.js';
+import ToDoWidget from '/js/ToDoWidget.js';
+import QuoteWidget from '/js/QuoteWidget.js';
+import WeatherWidget from '/js/WeatherWidget.js';
+import NewsWidget from '/js/NewsWidget.js';
 
 export default class Dashboard {
     constructor(containerId) {

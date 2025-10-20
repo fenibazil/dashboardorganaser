@@ -1,4 +1,4 @@
-import UIComponent from './UIComponent.js';
+import UIComponent from '/js/UIComponent.js';
 
 export default class HabitsWidget extends UIComponent {
     constructor(config = {}) {
