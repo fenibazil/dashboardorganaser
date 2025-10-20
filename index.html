@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Персональный организатор</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fas fa-calendar-alt"></i> Персональный организатор</h1>
+            <div class="date-display" id="current-date"></div>
+        </div>
+        <div class="controls">
+            <button id="add-tasks" class="btn">
+                <i class="fas fa-tasks"></i> Задачи
+            </button>
+            <button id="add-calendar" class="btn">
+                <i class="fas fa-calendar-day"></i> Календарь
+            </button>
+            <button id="add-notes" class="btn">
+                <i class="fas fa-sticky-note"></i> Заметки
+            </button>
+            <button id="add-habits" class="btn">
+                <i class="fas fa-chart-line"></i> Привычки
+            </button>
+            <button id="reset" class="btn btn-danger">
+                <i class="fas fa-trash"></i> Сбросить
+            </button>
+        </div>
+    </header>
+    
+    <main class="dashboard-container">
+        <div id="dashboard" class="dashboard"></div>
+    </main>
+    
+    <script type="module" src="main.js"></script>
+</body>
+</html>
