@@ -1,7 +1,7 @@
-import ToDoWidget from '/dashboardorganaser/js/ToDoWidget.js';
-import QuoteWidget from '/dashboardorganaser/js/QuoteWidget.js';
-import WeatherWidget from '/dashboardorganaser/js/WeatherWidget.js';
-import NewsWidget from '/dashboardorganaser/js/NewsWidget.js';
+import TaskWidget from '/dashboardorganaser/js/TaskWidget.js';
+import CalendarWidget from '/dashboardorganaser/js/CalendarWidget.js';
+import NotesWidget from '/dashboardorganaser/js/NotesWidget.js';
+import HabitsWidget from '/dashboardorganaser/js/HabitsWidget.js';
 
 export default class Dashboard {
     constructor(containerId) {
@@ -18,23 +18,22 @@ export default class Dashboard {
         this._render();
     }
     
-    // Добавление нового виджета
     addWidget(type, config = {}) {
         let widget;
         const widgetId = `widget-${this.nextWidgetId++}`;
         
         switch (type) {
-            case 'todo':
-                widget = new ToDoWidget({ ...config, id: widgetId });
+            case 'tasks':
+                widget = new TaskWidget({ ...config, id: widgetId });
                 break;
-            case 'quote':
-                widget = new QuoteWidget({ ...config, id: widgetId });
+            case 'calendar':
+                widget = new CalendarWidget({ ...config, id: widgetId });
                 break;
-            case 'weather':
-                widget = new WeatherWidget({ ...config, id: widgetId });
+            case 'notes':
+                widget = new NotesWidget({ ...config, id: widgetId });
                 break;
-            case 'news':
-                widget = new NewsWidget({ ...config, id: widgetId });
+            case 'habits':
+                widget = new HabitsWidget({ ...config, id: widgetId });
                 break;
             default:
                 console.error(`Неизвестный тип виджета: ${type}`);
@@ -44,18 +43,10 @@ export default class Dashboard {
         this.widgets.push(widget);
         this._render();
         this._saveToStorage();
-        
-        // Для асинхронных виджетов (погода, новости) вызываем рендер после добавления
-        if (type === 'weather' || type === 'news') {
-            setTimeout(() => {
-                widget.render().then(() => {
-                    this._render();
-                });
-            }, 0);
-        }
+        return widget;
     }
     
-    // Удаление виджета
+    // Остальные методы Dashboard остаются без изменений
     removeWidget(widgetId) {
         const widgetIndex = this.widgets.findIndex(widget => widget.id === widgetId);
         
@@ -67,7 +58,6 @@ export default class Dashboard {
         }
     }
     
-    // Отрисовка всех виджетов
     _render() {
         if (!this.container) return;
         
@@ -76,7 +66,7 @@ export default class Dashboard {
         if (this.widgets.length === 0) {
             this.container.innerHTML = `
                 <div class="empty-dashboard">
-                    <h2>Добро пожаловать в ваш персональный дашборд!</h2>
+                    <h2>Добро пожаловать в ваш персональный организатор!</h2>
                     <p>Добавьте виджеты с помощью кнопок выше, чтобы начать работу.</p>
                 </div>
             `;
@@ -89,7 +79,6 @@ export default class Dashboard {
         });
     }
     
-    // Сброс всех виджетов
     reset() {
         this.widgets.forEach(widget => {
             widget.destroy();
@@ -100,7 +89,6 @@ export default class Dashboard {
         this._render();
     }
     
-    // Сохранение состояния в localStorage
     _saveToStorage() {
         const dashboardState = {
             widgets: this.widgets.map(widget => ({
@@ -115,7 +103,6 @@ export default class Dashboard {
         localStorage.setItem('dashboardState', JSON.stringify(dashboardState));
     }
     
-    // Загрузка состояния из localStorage
     _loadFromStorage() {
         try {
             const savedState = localStorage.getItem('dashboardState');
