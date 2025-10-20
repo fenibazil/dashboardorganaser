@@ -1,8 +1,8 @@
-import Dashboard from '/js/Dashboard.js';
-import TaskWidget from '/js/TaskWidget.js';
-import CalendarWidget from '/js/CalendarWidget.js';
-import NotesWidget from '/js/NotesWidget.js';
-import HabitsWidget from '/js/HabitsWidget.js';
+import Dashboard from '/dashboardorganaser/js/Dashboard.js';
+import TaskWidget from '/dashboardorganaser/js/TaskWidget.js';
+import CalendarWidget from '/dashboardorganaser/js/CalendarWidget.js';
+import NotesWidget from '/dashboardorganaser/js/NotesWidget.js';
+import HabitsWidget from '/dashboardorganaser/js/HabitsWidget.js';
 
 // Инициализация приложения
 document.addEventListener('DOMContentLoaded', () => {
