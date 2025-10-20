@@ -1,0 +1,149 @@
+import UIComponent from './UIComponent.js';
+
+export default class WeatherWidget extends UIComponent {
+    constructor(config = {}) {
+        super({
+            ...config,
+            title: config.title || 'Погода',
+            type: 'weather'
+        });
+        
+        this.city = config.city || 'Москва';
+        this.weatherData = null;
+        this.error = null;
+    }
+    
+    async render() {
+        const widgetElement = document.createElement('div');
+        widgetElement.className = 'widget widget-weather';
+        widgetElement.id = this.id;
+        
+        widgetElement.innerHTML = `
+            <div class="widget-header">
+                <h3 class="widget-title">${this.title}</h3>
+                <div class="widget-controls">
+                    <button class="btn-minimize">−</button>
+                    <button class="btn-close">×</button>
+                </div>
+            </div>
+            <div class="widget-content">
+                <div class="weather-input">
+                    <input type="text" class="city-input" value="${this.city}" placeholder="Введите город">
+                    <button class="btn-search">Поиск</button>
+                </div>
+                <div class="weather-data">
+                    <div class="loading">Загрузка данных о погоде...</div>
+                </div>
+            </div>
+        `;
+        
+        this.element = widgetElement;
+        this._attachEventListeners();
+        
+        // Загружаем данные о погоде
+        await this._fetchWeatherData();
+        
+        return widgetElement;
+    }
+    
+    _attachEventListeners() {
+        super._attachEventListeners();
+        
+        if (!this.element) return;
+        
+        const searchButton = this.element.querySelector('.btn-search');
+        const cityInput = this.element.querySelector('.city-input');
+        
+        searchButton.addEventListener('click', () => {
+            const newCity = cityInput.value.trim();
+            if (newCity) {
+                this.city = newCity;
+                this._fetchWeatherData();
+            }
+        });
+        
+        cityInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const newCity = cityInput.value.trim();
+                if (newCity) {
+                    this.city = newCity;
+                    this._fetchWeatherData();
+                }
+            }
+        });
+    }
+    
+    async _fetchWeatherData() {
+        const weatherDataElement = this.element.querySelector('.weather-data');
+        
+        try {
+            weatherDataElement.innerHTML = '<div class="loading">Загрузка данных о погоде...</div>';
+            
+            // Используем OpenWeatherMap API (бесплатный ключ для демо)
+            // В реальном приложении ключ должен храниться безопасно
+            const apiKey = 'bd5e378503939ddaee76f12ad7a97608'; // Это демо-ключ, может не работать при высокой нагрузке
+            const response = await fetch(
+                `https://api.openweathermap.org/data/2.5/weather?q=${this.city}&appid=${apiKey}&units=metric&lang=ru`
+            );
+            
+            if (!response.ok) {
+                throw new Error('Город не найден или проблема с API');
+            }
+            
+            const data = await response.json();
+            this.weatherData = data;
+            this.error = null;
+            
+            this._updateWeatherDisplay();
+        } catch (error) {
+            this.error = error.message;
+            weatherDataElement.innerHTML = `
+                <div class="error">
+                    Ошибка: ${this.error}
+                </div>
+            `;
+        }
+    }
+    
+    _updateWeatherDisplay() {
+        if (!this.weatherData || !this.element) return;
+        
+        const weatherDataElement = this.element.querySelector('.weather-data');
+        const weather = this.weatherData;
+        
+        const iconUrl = `https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`;
+        
+        weatherDataElement.innerHTML = `
+            <div class="weather-main">
+                <div class="weather-city">${weather.name}, ${weather.sys.country}</div>
+                <div class="weather-temp">${Math.round(weather.main.temp)}°C</div>
+                <div class="weather-desc">
+                    <img src="${iconUrl}" alt="${weather.weather[0].description}">
+                    <span>${weather.weather[0].description}</span>
+                </div>
+            </div>
+            <div class="weather-details">
+                <div class="weather-detail">
+                    <span class="label">Ощущается как:</span>
+                    <span class="value">${Math.round(weather.main.feels_like)}°C</span>
+                </div>
+                <div class="weather-detail">
+                    <span class="label">Влажность:</span>
+                    <span class="value">${weather.main.humidity}%</span>
+                </div>
+                <div class="weather-detail">
+                    <span class="label">Давление:</span>
+                    <span class="value">${weather.main.pressure} hPa</span>
+                </div>
+                <div class="weather-detail">
+                    <span class="label">Ветер:</span>
+                    <span class="value">${weather.wind.speed} м/с</span>
+                </div>
+            </div>
+        `;
+    }
+    
+    update() {
+        this._fetchWeatherData();
+    }
+}
