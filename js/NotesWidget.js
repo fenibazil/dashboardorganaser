@@ -1,4 +1,4 @@
-import UIComponent from '/js/UIComponent.js';
+import UIComponent from '/dashboardorganaser/js/UIComponent.js';
 
 export default class NotesWidget extends UIComponent {
     constructor(config = {}) {

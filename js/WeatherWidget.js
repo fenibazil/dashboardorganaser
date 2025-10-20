@@ -1,4 +1,4 @@
-import UIComponent from './UIComponent.js';
+import UIComponent from '/dashboardorganaser/js/UIComponent.js';
 
 export default class WeatherWidget extends UIComponent {
     constructor(config = {}) {
