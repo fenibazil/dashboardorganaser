@@ -2,6 +2,10 @@ import TaskWidget from '/dashboardorganaser/js/TaskWidget.js';
 import CalendarWidget from '/dashboardorganaser/js/CalendarWidget.js';
 import NotesWidget from '/dashboardorganaser/js/NotesWidget.js';
 import HabitsWidget from '/dashboardorganaser/js/HabitsWidget.js';
+import ToDoWidget from '/dashboardorganaser/js/ToDoWidget.js';
+import QuoteWidget from '/dashboardorganaser/js/QuoteWidget.js';
+import WeatherWidget from '/dashboardorganaser/js/WeatherWidget.js';
+import NewsWidget from '/dashboardorganaser/js/NewsWidget.js';
 
 export default class Dashboard {
     constructor(containerId) {
@@ -34,6 +38,18 @@ export default class Dashboard {
                 break;
             case 'habits':
                 widget = new HabitsWidget({ ...config, id: widgetId });
+                break;
+            case 'todo':
+                widget = new ToDoWidget({ ...config, id: widgetId });
+                break;
+            case 'quote':
+                widget = new QuoteWidget({ ...config, id: widgetId });
+                break;
+            case 'weather':
+                widget = new WeatherWidget({ ...config, id: widgetId });
+                break;
+            case 'news':
+                widget = new NewsWidget({ ...config, id: widgetId });
                 break;
             default:
                 console.error(`Неизвестный тип виджета: ${type}`);
